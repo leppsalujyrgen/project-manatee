@@ -28,8 +28,8 @@ gradlew bootRun # Starts the application on a local network.
 # Summary
 | Question                                 | Answer |
 |------------------------------------------|--------|
-| Time  spent (h)                          | 0h     |
-| Hardest task, (with reasoning)           | -      |
+| Time  spent (h)                          | 12h     |
+| Hardest task, (with reasoning)           | Task 5. I could not include Interview field in Application class in reasonable time. Different solutions ran into errors thrown by either mappers or Hibernate. Had to implement a less eloquent solution. |
 | Uncompleted tasks, if any                | -      |
 | Additional dependencies (with reasoning) | -      | 
 
@@ -39,4 +39,11 @@ and any technical challenges you encountered. Your answer should be
 between 50-100 words.
 
 SUMMARY:
-...
+Seemingly simple aspects of the practice task: 
+1) Creating endpoints and DTOs using the YAML file.
+1) Seeding the database by using a configuration file.
+
+Difficult aspects of the practice task:
+1) Task 5 as described above (due to issues creating the best association between Interview and Application entities)
+2) Keeping good separation of concerns between classes.
+1) Achieving good test coverage in a limited time. 
