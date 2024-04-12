@@ -34,7 +34,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Application'
+                  $ref: '#/components/schemas/Application'    
     post:
       operationId: addApplication
       tags:
@@ -55,6 +55,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Application'
+  
+  /applications/scheduled:
+    get:
+      operationId: getInterviews
+      tags:
+        - Application
+      summary: Queries all interviews scheduled for submitted applications.
+      description: Selects all interviews scheduled for submitted applications that is stored in database and returns them as an array.
+      responses:
+        '200':
+          description: Successful query returns an array of interviews for all applications.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Interview'
+
   /applications/{applicationId}:
     patch:
       operationId: rejectApplication
@@ -67,6 +85,35 @@ paths:
       responses:
         '202':
           description: Application rejection was accepted and state transition was successful.
+
+  /applications/{applicationId}/interview/:
+    post:
+      operationId: scheduleInterview
+      tags:
+        - Application
+      summary: Schedules an interview for an application with given Id.
+      description: Creates and interview and links it with an application. The application must exists before scheduling an interview.
+      parameters:
+        - $ref: '#/components/parameters/ApplicationId'
+      requestBody:
+        description: New interview information. Contains the datetime for the interview.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Interview'
+      responses:
+        '201':
+          description: Successfully submitted applications returns an instance with given id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Interview'
+        '404':
+          description: Application is not found.
+
+  
+
 
 components:
   schemas:
@@ -98,6 +145,19 @@ components:
         lastName:
           type: string
 
+    Interview:
+      type: object
+      required:
+        - time
+      properties:
+        id:
+          type: integer
+        application:
+          $ref: '#/components/schemas/Application'
+        time:
+          type: string
+          format: date-time
+
     ApplicationState:
       type: string
       enum:
@@ -116,3 +176,18 @@ components:
       required: true
       schema:
         type: integer
+    InterviewId:
+      name: interviewId
+      in: path
+      description: ID of interview to use
+      required: true
+      schema:
+        type: integer
+    InterviewQuery:
+      name: interview
+      in: query
+      description: Filter applications based on whether they have interviews scheduled
+      required: false,
+      schema:
+        type: boolean
+    

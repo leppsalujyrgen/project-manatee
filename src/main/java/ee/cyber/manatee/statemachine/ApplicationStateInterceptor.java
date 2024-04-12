@@ -2,6 +2,8 @@ package ee.cyber.manatee.statemachine;
 
 
 import java.time.OffsetDateTime;
+import java.time.Instant;
+import java.time.ZoneOffset;
 import java.util.Optional;
 
 import lombok.RequiredArgsConstructor;
@@ -39,7 +41,7 @@ public class ApplicationStateInterceptor
                 .flatMap(applicationRepository::findById)
                 .ifPresentOrElse(application -> {
                     application.setApplicationState(state.getId());
-                    application.setUpdatedOn(OffsetDateTime.now());
+                    application.setUpdatedOn(OffsetDateTime.ofInstant(Instant.now(), ZoneOffset.UTC));
 
                     applicationRepository.save(application);
                 }, () -> {

@@ -46,6 +46,12 @@ public class ApplicationStateMachineConfig
 
                    .and()
                    .withExternal()
+                   .source(ApplicationState.NEW)
+                   .target(ApplicationState.INTERVIEW)
+                   .event(ApplicationEvent.SCHEDULE)
+
+                   .and()
+                   .withExternal()
                    .source(ApplicationState.INTERVIEW)
                    .target(ApplicationState.REJECTED)
                    .event(ApplicationEvent.REJECT)
