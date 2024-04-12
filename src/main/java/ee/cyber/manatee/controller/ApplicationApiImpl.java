@@ -60,7 +60,7 @@ public class ApplicationApiImpl implements ApplicationApi {
     }
 
     @Override
-    public ResponseEntity<ApplicationDto> addApplication(ApplicationDto applicationDto) {
+    public ResponseEntity<ApplicationDto> addApplication(@Valid @RequestBody ApplicationDto applicationDto) {
         val draftApplication = applicationMapper.dtoToEntity(applicationDto);
         val application = applicationService.insertApplication(draftApplication);
 
