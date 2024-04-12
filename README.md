@@ -39,6 +39,7 @@ and any technical challenges you encountered. Your answer should be
 between 50-100 words.
 
 SUMMARY:
+
 Seemingly simple aspects of the practice task: 
 1) Creating endpoints and DTOs using the YAML file.
 1) Seeding the database by using a configuration file.
