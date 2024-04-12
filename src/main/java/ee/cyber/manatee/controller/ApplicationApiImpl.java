@@ -22,8 +22,11 @@ import ee.cyber.manatee.dto.ApplicationStateDto;
 import ee.cyber.manatee.dto.InterviewDto;
 import ee.cyber.manatee.mapper.ApplicationMapper;
 import ee.cyber.manatee.mapper.InterviewMapper;
+import ee.cyber.manatee.model.Application;
+import ee.cyber.manatee.model.Interview;
 import ee.cyber.manatee.service.ApplicationService;
 import ee.cyber.manatee.service.InterviewService;
+import ee.cyber.manatee.statemachine.ApplicationState;
 import jakarta.validation.OverridesAttribute;
 import jakarta.validation.Valid;
 
@@ -46,8 +49,14 @@ public class ApplicationApiImpl implements ApplicationApi {
     }
 
     @Override
-    public ResponseEntity<List<InterviewDto>> getInterviews() {
-        return ResponseEntity.ok(interviewMapper.entitiesToDtoList(interviewService.getInterviews()));
+    public ResponseEntity<List<InterviewDto>> getApplicationInterviews() { // AD-HOC solution because I could not map Application and Interview entities properly.
+        List<Interview> interviews = new ArrayList<Interview>();
+        for (Interview interview : interviewService.getInterviews()) {
+            if (ApplicationState.INTERVIEW.equals(interview.getApplication().getApplicationState())) {
+                interviews.add(interview);
+            }
+        }
+        return ResponseEntity.ok(interviewMapper.entitiesToDtoList(interviews));
     }
 
     @Override
@@ -64,6 +73,10 @@ public class ApplicationApiImpl implements ApplicationApi {
             @PathVariable("applicationId") Integer applicationId,
             @Valid @RequestBody InterviewDto interviewDto) {
         val draftInterview = interviewMapper.dtoToEntity(interviewDto);
+        val application = applicationService.getApplicationById(applicationId);
+        if (application.isEmpty()) 
+            return ResponseEntity.status(NOT_FOUND).build(); 
+        draftInterview.setApplication(application.get());
         val interview = interviewService.addInterview(draftInterview);
         return ResponseEntity.status(CREATED).body(interviewMapper.entityToDto(interview));
     }

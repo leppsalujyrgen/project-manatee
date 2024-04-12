@@ -58,7 +58,7 @@ paths:
   
   /applications/scheduled:
     get:
-      operationId: getInterviews
+      operationId: getApplicationInterviews
       tags:
         - Application
       summary: Queries all interviews scheduled for submitted applications.
